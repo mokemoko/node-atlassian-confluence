@@ -99,8 +99,14 @@ class Confluence
     params.cql = cql
     @XHR "GET", "/content/search", params, null, callback
 
+  getLikes: (contentId, params, callback) ->
+    @_XHR "GET", "/rest/likes/1.0/content/#{contentId}/likes", params, null, callback
+
   #  utils
   XHR:(method, api, params, payload, callback) ->
+    @_XHR(method, "/rest/api#{api}", params, payload, callback)
+
+  _XHR: (method, path, params, payload, callback) ->
 
     if params == null
       params = ''
@@ -111,7 +117,7 @@ class Confluence
 
     options =
       host: @host
-      path: "#{@context}/rest/api#{api}#{params}"
+      path: "#{@context}#{path}#{params}"
       method: method
       auth: "#{@username}:#{@password}"
       headers:
